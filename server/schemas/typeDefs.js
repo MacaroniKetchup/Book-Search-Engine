@@ -5,17 +5,28 @@ type User {
     _id: ID
     username: String
     email: String
+    password: String
     bookcount: Int
-    savedBooks: [bookShema]
+    savedBooks: [Book]!
 }
 
 type Book {
     bookId: String
-    authors: [{ String }]
+    authors: [ String ]
     description: String
-    title: String
+    title: String!
     image: String
     link: String
+}
+
+input BookInfo {
+    bookId: String!
+    authors: [ String ]
+    description: String
+    title: String!
+    image: String
+    link: String
+
 }
 
 type Auth {
@@ -38,7 +49,7 @@ type Mutation {
     # Need to look into creating a "input" type to handle multiple parameters
     # for author's array, description, title, bookId, image,
     # and link parameters
-    saveBook(): User
+    saveBook(bookData: BookInfo!): User
     removeBook(bookId: String!): User
 }
 `
