@@ -38,8 +38,8 @@ const resolvers = {
 
             return { token, user };
         },
-        // saveBook with args of title and bookId
-        saveBook: async (parent, { title, bookId }, context) => {
+        // saveBook with arg of bookId
+        saveBook: async (parent, { bookId }, context) => {
             // if user is logged in
             if (context.user) {
                 // find user and update savedBooks array with title and bookId
@@ -50,7 +50,7 @@ const resolvers = {
                             savedBooks: { title, bookId },
                         }
                     },
-                    // Validation if book is new to the savedBooksarray
+                    // Validation if book is new to the savedBooks array
                     {
                         new: true,
                         runValidators: true,
@@ -59,25 +59,19 @@ const resolvers = {
             }
             throw new AuthenticationError('You need to be logged in!');
         },
-        // removeBook with title and bookId
-        removeBook: async (parent, { title, bookId }, context) => {
+        // removeBook with a bookId
+        removeBook: async (parent, { bookId }, context) => {
             // if user is logged in
             if (context.user) {
-                // savedBook variable to findOneAndDelete Boowith bookId and title
-                const savedBook = await Book.findOneAndDelete({
-                    _id: bookId,
-                    title
-                });
-                // update the User and pull from savedBooks by id 
-                await User.findOneAndUpdate(
+                // savedBook variable to findOneAndDelete a savedBook with bookId 
+                return User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $pull: { savedBooks: savedBook._id }}
+                    { $pull: { savedBooks: { bookId: bookId } } },
+                    { new: true }
                 );
-                return User
             }
-            throw new AuthenticationError('You need to be logged in!')
-        }
-    }
+        },
+    },
 };
 
 module.exports = resolvers;
