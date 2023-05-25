@@ -36,7 +36,7 @@ const SignupForm = () => {
       const { data } = await addUser({ variables: { ...userFormData } });
         Auth.login(data.addUser.token);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setShowAlert(true);
     }
 
@@ -66,7 +66,8 @@ const SignupForm = () => {
             value={userFormData.username}
             required
           />
-          <Form.Control.Feedback type='invalid'>Username is required!</Form.Control.Feedback>
+          {validated && !userFormData.username && (
+          <Form.Control.Feedback type='invalid'>Username is required!</Form.Control.Feedback>)}
         </Form.Group>
 
         <Form.Group className='mb-3'>

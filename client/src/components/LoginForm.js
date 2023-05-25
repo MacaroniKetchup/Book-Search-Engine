@@ -11,7 +11,7 @@ const LoginForm = () => {
   // set initial form state
   const [userFormData, setUserFormData] = useState({ email: '', password: '' });
   // set state for form validation
-  const [validated] = useState(false);
+  const [validated, setValidated] = useState(false);
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
   // LOGIN_USER hook
@@ -32,18 +32,20 @@ const LoginForm = () => {
       event.stopPropagation();
     }
 
+    // Update Validated State
+    setValidated(true);
+
     // try catch that awaits userFormData properties as the variables, adds users login data with a token
     try {
       const { data } = await loginUser({ variables: {...userFormData } });
       Auth.login(data.login.token);
     }
      catch (err) {
-      console.err(err);
+      console.error(err);
       setShowAlert(true);
      }
 
     setUserFormData({
-      username: '',
       email: '',
       password: '',
     });
