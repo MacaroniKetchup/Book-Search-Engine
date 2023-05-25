@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-// query to get users profile
+// query to get the logged in users profile
 export const GET_ME = gql`
   query me($username: String!) {
     me(username: $username) {
