@@ -4,20 +4,12 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-        // Find username and populate with savedBooks list
-        user: async (parent, { username }) => {
-            return User.findOne({ username }).populate('savedBooks');
-        },
-        // find and sort book by title
-        book: async (parent, { title }) => {
-            return Book.find().sort({ title });
-        },
 
         me: async (parent, args, context) => {
             if (context.user) {
-                return User.findOne({ _id: context.user._id }).populate('savedBooks');
+                const userData = await User.findOne({ _id: context.user._id }).select('-__v-password');
+                return userData
             }
-            throw new AuthenticationError('You Need to be logged in!')
         },
     },
 
@@ -46,12 +38,13 @@ const resolvers = {
 
             return { token, user };
         },
-        // addBook with args of title and bookId
-        addBook: async (parent, { title, bookId }, context) => {
+        // saveBook with args of title and bookId
+        saveBook: async (parent, { title, bookId }, context) => {
             // if user is logged in
             if (context.user) {
                 // find user and update savedBooks array with title and bookId
                 return User.findOneUpdate(
+                    { _id: context.user._id },
                     {
                         $addToSet: {
                             savedBooks: { title, bookId },

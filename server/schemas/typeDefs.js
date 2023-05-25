@@ -36,10 +36,6 @@ type Auth {
 # the "!" syntax at the end of each property like "String!" is like writting,
 # "required: true" in a model
 type Query {
-    user: [User]
-    user(username: String!): User
-    savedBooks(username: String): [savedBooks]
-    bookCount: [savedBooks]
     me: User
 }
 
