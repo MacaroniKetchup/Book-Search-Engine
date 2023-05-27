@@ -38,16 +38,16 @@ const resolvers = {
 
             return { token, user };
         },
-        // saveBook with arg of bookId
-        saveBook: async (parent, { bookId }, context) => {
+        // saveBook with arg of bookData
+        saveBook: async (parent, { bookData }, context) => {
             // if user is logged in
             if (context.user) {
-                // find user and update savedBooks array with title and bookId
+                // find user and update savedBooks array with bookData
                 return User.findOneUpdate(
                     { _id: context.user._id },
                     {
                         $addToSet: {
-                            savedBooks: { title, bookId },
+                            savedBooks: { bookData },
                         }
                     },
                     // Validation if book is new to the savedBooks array
