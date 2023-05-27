@@ -43,19 +43,11 @@ const resolvers = {
             // if user is logged in
             if (context.user) {
                 // find user and update savedBooks array with bookData
-                return User.findOneUpdate(
+                return await User.findByIdAndUpdate(
                     { _id: context.user._id },
-                    {
-                        $addToSet: {
-                            savedBooks: { bookData },
-                        }
-                    },
-                    // Validation if book is new to the savedBooks array
-                    {
-                        new: true,
-                        runValidators: true,
-                    }
-                );
+                    { $addToSet: { savedBooks: bookData } },
+                    { new: true, runValidators: true }
+                  );
             }
             throw new AuthenticationError('You need to be logged in!');
         },
